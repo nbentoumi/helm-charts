@@ -1,4 +1,4 @@
-{{- if .Values.deploy.route.enabled }}
+{{- if .Values.route.enabled }}
 apiVersion: route.openshift.io/v1
 kind: Route
 metadata:
@@ -6,30 +6,36 @@ metadata:
   labels:
     {{- include "ansibledb.labels" . | nindent 4 }}
 spec:
+  {{- if .Values.route.host }}
+  host: {{  .Values.route.host }}
+  {{- end }}
+  {{- if .Values.route.path }}
+  path: {{ .Values.route.path }}
+  {{- end }}
   to:
     kind: Service
     name: {{ include "ansibledb.name" . }}
   port:
-    targetPort: {{ tpl .Values.deploy.route.targetPort . }}
-{{- if .Values.deploy.route.tls.enabled }}
+    targetPort: {{ tpl .Values.route.targetPort . }}
+{{- if .Values.route.tls.enabled }}
   tls:
-    termination: {{ .Values.deploy.route.tls.termination }}
-    insecureEdgeTerminationPolicy: {{ .Values.deploy.route.tls.insecureEdgeTerminationPolicy }}
-  {{- if .Values.deploy.route.tls.key }}
+    termination: {{ .Values.route.tls.termination }}
+    insecureEdgeTerminationPolicy: {{ .Values.route.tls.insecureEdgeTerminationPolicy }}
+  {{- if .Values.route.tls.key }}
     key: |-
-      {{- .Values.deploy.route.tls.key | nindent 6 }}
+      {{- .Values.route.tls.key | nindent 6 }}
   {{- end }}
-  {{- if .Values.deploy.route.tls.destinationCACertificate }}
+  {{- if .Values.route.tls.destinationCACertificate }}
     destinationCACertificate: |-
-      {{- .Values.deploy.route.tls.destinationCACertificate | nindent 6 }}
+      {{- .Values.route.tls.destinationCACertificate | nindent 6 }}
   {{- end }}
-  {{- if .Values.deploy.route.tls.caCertificate }}
+  {{- if .Values.route.tls.caCertificate }}
     caCertificate: |-
-      {{- .Values.deploy.route.tls.caCertificate | nindent 6 }}
+      {{- .Values.route.tls.caCertificate | nindent 6 }}
   {{- end }}
-  {{- if .Values.deploy.route.tls.certificate }}
+  {{- if .Values.route.tls.certificate }}
     certificate: |-
-      {{- .Values.deploy.route.tls.certificate | nindent 6 }}
+      {{- .Values.route.tls.certificate | nindent 6 }}
   {{- end }}
 {{- end }}
 {{- end }}

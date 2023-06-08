@@ -57,19 +57,19 @@ ingress:
   #      - chart-example.local
 
 
-  ## For creating a Route, allowing your application to be accessed from outside the OCP cluster
-  route:
-    enabled: false
-    targetPort: http
-    tls:
-      enabled: true
-      termination: edge
-      insecureEdgeTerminationPolicy: Redirect
-      ## IMPORTANT: secret data should be encrypted
-      key:
-      caCertificate:
-      certificate:
-      destinationCACertificate:
+## For creating a Route, allowing your application to be accessed from outside the OCP cluster
+route:
+  enabled: false
+  targetPort: http
+  tls:
+    enabled: true
+    termination: edge
+    insecureEdgeTerminationPolicy: Redirect
+    ## IMPORTANT: secret data should be encrypted
+    key:
+    caCertificate:
+    certificate:
+    destinationCACertificate:
 
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious

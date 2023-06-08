@@ -107,6 +107,7 @@ mongodb:
     enabled: true
     rootUser: root
     rootPassword: changeme
+    usernames: ["ansibledb"]
     databases: ["ansibledb"]
   persistence:
     size: 20Gi

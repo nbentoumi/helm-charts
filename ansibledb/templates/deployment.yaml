@@ -35,25 +35,25 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
             - name: MONGO_HOST
-              value: {{ include "ansibledb.mongodbServiceName" . }}
-            - name: MONGO_USER
-              value: {{ index .Values.mongodb.auth.rootUser 0 }}
-            - name: MONGO_PASS
+              value: {{ include "ansibledb.mongodbServiceName" . | quote }}
+            - name: MONGO_USERNAME
+              value: {{ .Values.mongodb.auth.rootUser | quote }}
+            - name: MONGO_PASSWORD
               valueFrom:
                 secretKeyRef:
                   key: mongodb-password
-                  name: {{ include "ansibledb.fullname" . }}
+                  name: {{ include "ansibledb.fullname" . | quote }}
             - name: MONGO_PORT
               value: {{ include "ansibledb.mongodbServicePort" . | quote }}
-            - name: MONGO_DB
-              value: {{ index .Values.mongodb.auth.databases 0 }}
+            - name: MONGO_DATABASE
+              value: {{ index .Values.mongodb.auth.databases 0 | quote }}
             - name: ADMIN_USERNAME
-              value: {{ .Values.ansibledb.admin.username }}
+              value: {{ .Values.ansibledb.admin.username | quote }}
             - name: ADMIN_PASSWORD
               valueFrom:
                 secretKeyRef:
                   key: admin-password
-                  name: {{ include "ansibledb.fullname" . }}
+                  name: {{ include "ansibledb.fullname" . | quote }}
             {{- if .Values.ansibledb.ldap.enabled }}
             - name: LDAP_FID_USERNAME
               value: {{ .Values.ansibledb.ldap.username }}
@@ -72,7 +72,7 @@ spec:
    
           ports:
             - name: http
-              containerPort: 80
+              containerPort: 8080
               protocol: TCP
           livenessProbe:
             httpGet:

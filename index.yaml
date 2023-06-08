@@ -1,0 +1,34 @@
+apiVersion: v1
+entries:
+  ansibledb:
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2023-06-07T22:05:39.524543378-04:00"
+    dependencies:
+    - condition: mongodb.enabled
+      name: mongodb
+      repository: https://charts.bitnami.com/bitnami
+      version: 13.15.0
+    description: Ansibledb Helm chart for Kubernetes
+    digest: e0ed1f8c45f2b39510bbbc9525e4d02f0c575dce3867d7f5701f65bdbb3939c0
+    name: ansibledb
+    type: application
+    urls:
+    - https://nbentoumi.github.io/helm-charts/ansibledb-0.1.0.tgz
+    version: 0.1.0
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2023-06-07T22:05:39.533371232-04:00"
+    dependencies:
+    - condition: mongodb.enabled
+      name: mongodb
+      repository: https://charts.bitnami.com/bitnami
+      version: 13.15.0
+    description: Ansibledb Helm chart for Kubernetes
+    digest: 7a254057173847c504af89402aec21cf9a82826ab29c3c45efb4c4ff3af1dbf1
+    name: ansibledb
+    type: application
+    urls:
+    - https://nbentoumi.github.io/helm-charts/ansibledb/ansibledb-0.1.0.tgz
+    version: 0.1.0
+generated: "2023-06-07T22:05:39.516571681-04:00"

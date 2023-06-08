@@ -131,7 +131,8 @@ mongodb:
 
   podSecurityContext: {}
     # fsGroup: 2000
-
+  containerSecurityContext: {}
+    # runAsUser: 2000
   securityContext: {}
     # capabilities:
     #   drop:
@@ -139,3 +140,11 @@ mongodb:
     # readOnlyRootFilesystem: true
     # runAsNonRoot: true
     # runAsUser: 1000
+  resources: {}
+    # limits:
+    #   cpu: 2000m
+    #   memory: 1024Mi
+    # requests:
+    #   cpu: 1000m
+    #   memory: 800Mi
+  

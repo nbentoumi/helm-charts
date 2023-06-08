@@ -56,7 +56,7 @@ spec:
                   name: {{ include "ansibledb.fullname" . | quote }}
             {{- if .Values.ansibledb.ldap.enabled }}
             - name: LDAP_FID_USERNAME
-              value: {{ .Values.ansibledb.ldap.username }}
+              value: {{ .Values.ansibledb.ldap.fid_username }}
             - name: LDAP_FID_PASSWORD
               valueFrom:
                 secretKeyRef:
@@ -66,8 +66,10 @@ spec:
               value: {{ .Values.ansibledb.ldap.server }}
             - name: LDAP_BASE_DN
               value: {{ .Values.ansibledb.ldap.baseDn }}
+            {{- if .Values.ansibledb.ldap.requiredGroup }}
             - name: LDAP_REQUIRED_GROUP
               value: {{ .Values.ansibledb.ldap.requiredGroup }}
+            {{- end }}
             {{- end }}
    
           ports:

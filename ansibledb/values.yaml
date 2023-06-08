@@ -85,13 +85,15 @@ ansibledb:
   admin:
     username: admin
     password: admin
-  # variables below with appropriate values to enable LDAP
+  # Enable LDAP along with ldap variables
   ldap:
     enabled: false
-  #  username: "CN=fid_ad_account,OU=Users,OU=OU Units,DC=company,DC=com"
-  #  password: changeme
+  #  LDAP variables, functional id (fid)
+  #  fid_username: "CN=fid_ad_account,OU=Users,OU=OU Units,DC=company,DC=com"
+  #  fid_password: changeme
   #  server: "ldaps://ldap_server:636""
   #  baseDn: "DC=company,DC=com"
+  #  The parameter below is optional, this will restrict access to specific AD group, if not defined, all AD authenticated users are allowed 
   #  requiredGroup: "CN=AD_GROUP,OU=Groups,OU=OU Units,DC=company,DC=com"
     
 mongodb:

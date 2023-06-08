@@ -1,0 +1,98 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "ansibledb.fullname" . }}
+  labels:
+    {{- include "ansibledb.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "ansibledb.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "ansibledb.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "ansibledb.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: MONGO_HOST
+              value: {{ include "ansibledb.mongodbServiceName" . }}
+            - name: MONGO_USER
+              value: {{ index .Values.mongodb.auth.rootUser 0 }}
+            - name: MONGO_PASS
+              valueFrom:
+                secretKeyRef:
+                  key: mongodb-password
+                  name: {{ include "ansibledb.fullname" . }}
+            - name: MONGO_PORT
+              value: {{ include "ansibledb.mongodbServicePort" . | quote }}
+            - name: MONGO_DB
+              value: {{ index .Values.mongodb.auth.databases 0 }}
+            - name: ADMIN_USERNAME
+              value: {{ .Values.ansibledb.admin.username }}
+            - name: ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: admin-password
+                  name: {{ include "ansibledb.fullname" . }}
+            {{- if .Values.ansibledb.ldap.enabled }}
+            - name: LDAP_FID_USERNAME
+              value: {{ .Values.ansibledb.ldap.username }}
+            - name: LDAP_FID_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: ldap-fid-password
+                  name: {{ include "ansibledb.fullname" . }}
+            - name: LDAP_SERVER
+              value: {{ .Values.ansibledb.ldap.server }}
+            - name: LDAP_BASE_DN
+              value: {{ .Values.ansibledb.ldap.baseDn }}
+            - name: LDAP_REQUIRED_GROUP
+              value: {{ .Values.ansibledb.ldap.requiredGroup }}
+            {{- end }}
+   
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
